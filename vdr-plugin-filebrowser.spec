@@ -1,8 +1,8 @@
 
 %define plugin	filebrowser
 %define name	vdr-plugin-%plugin
-%define version	0.0.6
-%define rel	5
+%define version	0.0.6b
+%define rel	1
 
 Summary:	VDR plugin: Browse through files and execute actions on them
 Name:		%name
