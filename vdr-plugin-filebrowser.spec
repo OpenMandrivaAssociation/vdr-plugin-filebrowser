@@ -1,19 +1,19 @@
 
 %define plugin	filebrowser
 %define name	vdr-plugin-%plugin
-%define version	0.0.6b
-%define rel	6
+%define version	0.2.0
+%define rel	1
 
 Summary:	VDR plugin: Browse through files and execute actions on them
 Name:		%name
 Version:	%version
 Release:	%mkrel %rel
 Group:		Video
-License:	GPL
-URL:		http://www.stud.uni-karlsruhe.de/~uqg8/vdr/filebrowser/
-Source:		http://www.stud.uni-karlsruhe.de/~uqg8/vdr/filebrowser/vdr-%plugin-%version.tar.bz2
+License:	GPLv3+
+URL:		http://vdr.nasenbaeren.net/filebrowser/
+Source:		http://vdr.nasenbaeren.net/filebrowser/vdr-%plugin-%version.tgz
 BuildRoot:	%{_tmppath}/%{name}-buildroot
-BuildRequires:	vdr-devel >= 1.4.1-6
+BuildRequires:	vdr-devel >= 1.6.0
 Requires:	vdr-abi = %vdr_abi
 
 %description
@@ -22,6 +22,7 @@ on files.
 
 %prep
 %setup -q -n %plugin-%version
+%vdr_plugin_prep
 
 %build
 %vdr_plugin_build
