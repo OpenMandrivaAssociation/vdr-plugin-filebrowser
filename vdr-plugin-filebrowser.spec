@@ -12,6 +12,7 @@ Group:		Video
 License:	GPLv3+
 URL:		http://vdr.nasenbaeren.net/filebrowser/
 Source:		http://vdr.nasenbaeren.net/filebrowser/vdr-%plugin-%version.tgz
+Patch0:		filebrowser-format-string.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	vdr-devel >= 1.6.0
 Requires:	vdr-abi = %vdr_abi
@@ -22,6 +23,7 @@ on files.
 
 %prep
 %setup -q -n %plugin-%version
+%patch0 -p1
 %vdr_plugin_prep
 
 %build
