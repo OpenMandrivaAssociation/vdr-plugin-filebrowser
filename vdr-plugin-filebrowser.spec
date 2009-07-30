@@ -14,8 +14,11 @@ URL:		http://vdr.nasenbaeren.net/filebrowser/
 Source:		http://vdr.nasenbaeren.net/filebrowser/vdr-%plugin-%version.tgz
 Patch0:		filebrowser-format-string.patch
 Patch1:		filebrowser-type-fixes.patch
+# workaround for http://sourceware.org/bugzilla/show_bug.cgi?id=9759
+# for pre-2.10 glibc
+Patch2:		filebrowser-dirent.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
-BuildRequires:	vdr-devel >= 1.6.0
+BuildRequires:	vdr-devel >= 1.6.0-7
 Requires:	vdr-abi = %vdr_abi
 
 %description
@@ -26,9 +29,14 @@ on files.
 %setup -q -n %plugin-%version
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %vdr_plugin_prep
 
 %build
+%if %{mdkversion} < 201000
+# patch2
+VDR_PLUGIN_EXTRA_FLAGS="-DGLIBC_SCANDIR_BUG"
+%endif
 %vdr_plugin_build
 
 %install
