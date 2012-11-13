@@ -1,0 +1,42 @@
+Index: filebrowser-0.2.0/menu-filebrowser.c
+===================================================================
+--- filebrowser-0.2.0/menu-filebrowser.c
++++ filebrowser-0.2.0/menu-filebrowser.c	2009-07-30 15:05:04.918386077 +0300
+@@ -141,12 +141,19 @@
+    if ( BaseDirectory ) delete BaseDirectory;
+ }
+ 
++#ifdef GLIBC_SCANDIR_BUG
+ int cOsdMenuFilebrowser::DirectorySort ( const void* File1, const void* File2 )
+ {
++   const struct dirent64* ent1=* (struct dirent64** ) File1;
++   const struct dirent64* ent2=* (struct dirent64** ) File2;
++#else
++int cOsdMenuFilebrowser::DirectorySort ( const dirent64** File1, const dirent64** File2 )
++{
+ 
+-   struct dirent64* ent1=* ( struct dirent64** ) File1;
++   const struct dirent64* ent1=*File1;
+ 
+-   struct dirent64* ent2=* ( struct dirent64** ) File2;
++   const struct dirent64* ent2=*File2;
++#endif
+ 
+    if ( strcmp ( ent1->d_name, ".." ) == 0 )
+    {
+Index: filebrowser-0.2.0/menu-filebrowser.h
+===================================================================
+--- filebrowser-0.2.0/menu-filebrowser.h
++++ filebrowser-0.2.0/menu-filebrowser.h	2009-07-30 15:05:28.206134862 +0300
+@@ -72,7 +72,11 @@
+ 
+     eMenuFilebrowserTask Task;
+ 
++#ifdef GLIBC_SCANDIR_BUG
+     static int DirectorySort(const void* File1, const void* File2);
++#else
++    static int DirectorySort(const dirent64** File1, const dirent64** File2);
++#endif
+     /*
+      *  This filters entries shown in Filebrowser
+      *  The function uses Statebag->ShowHiddenFiles and Statebag->Filter

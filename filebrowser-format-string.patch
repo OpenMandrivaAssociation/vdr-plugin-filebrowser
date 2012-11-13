@@ -1,0 +1,26 @@
+Index: filebrowser-0.2.0/command-sources.c
+===================================================================
+--- filebrowser-0.2.0/command-sources.c
++++ filebrowser-0.2.0/command-sources.c	2009-03-21 10:51:11.000000000 +0200
+@@ -93,7 +93,7 @@
+ void cFilebrowserCommandSourcesList::cSource::SwitchTo(cFilebrowserStatebag* Statebag)
+ {
+   D(fprintf(stderr, "[filebrowser] Setting new source: %s\n", *Path));
+-  sprintf(Statebag->BaseDir, Path);
++  sprintf(Statebag->BaseDir, "%s", Path);
+   Statebag->CurrentFiles->Clear();
+   Statebag->CurrentDirectory=Path;
+   Statebag->Filter=Filter;
+Index: filebrowser-0.2.0/threads.c
+===================================================================
+--- filebrowser-0.2.0/threads.c
++++ filebrowser-0.2.0/threads.c	2009-03-21 10:50:07.000000000 +0200
+@@ -303,7 +303,7 @@
+     Description=(char*)malloc(strlen(Command->GetName()) + 1);
+     sprintf(Description, "%s", Command->GetName());
+   }
+-  SetDescription(Description);
++  SetDescription("%s", Description);
+   RemoveRequested=Command->RemoveWhenFinished();
+ //  D(fprintf(stderr, "got %d marked files\n", Statebag->GetSelectedFiles()->Count()));
+   D(fprintf(stderr, "created thread %s\n", Description));

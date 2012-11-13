@@ -1,0 +1,65 @@
+Index: filebrowser-0.2.0/command-sources.c
+===================================================================
+--- filebrowser-0.2.0/command-sources.c
++++ filebrowser-0.2.0/command-sources.c	2009-07-27 18:45:03.883093639 +0300
+@@ -93,7 +93,7 @@
+ void cFilebrowserCommandSourcesList::cSource::SwitchTo(cFilebrowserStatebag* Statebag)
+ {
+   D(fprintf(stderr, "[filebrowser] Setting new source: %s\n", *Path));
+-  sprintf(Statebag->BaseDir, "%s", Path);
++  sprintf(Statebag->BaseDir, "%s", (const char*) Path);
+   Statebag->CurrentFiles->Clear();
+   Statebag->CurrentDirectory=Path;
+   Statebag->Filter=Filter;
+Index: filebrowser-0.2.0/commands.c
+===================================================================
+--- filebrowser-0.2.0/commands.c
++++ filebrowser-0.2.0/commands.c	2009-07-27 18:41:00.789842697 +0300
+@@ -96,7 +96,7 @@
+   {
+     if(Pattern[0]!='/')
+     {
+-      char* filename_tmp=NULL;
++      const char* filename_tmp=NULL;
+       Filename=(Filename && (filename_tmp=strrchr(Filename, '/'))) ? filename_tmp + 1 : NULL;
+     }
+     if(Filename==NULL)
+Index: filebrowser-0.2.0/menu-filebrowser.c
+===================================================================
+--- filebrowser-0.2.0/menu-filebrowser.c
++++ filebrowser-0.2.0/menu-filebrowser.c	2009-07-27 18:46:44.970094182 +0300
+@@ -202,11 +202,14 @@
+    {
+       if ( * ( Statebag->CurrentDirectory ) )
+       {
+-         char* slash=strrchr ( * ( Statebag->CurrentDirectory ), '/' );
++	 char* newCurrentDir = strdup(Statebag->CurrentDirectory);
++	 if (newCurrentDir) {
++         char* slash=strrchr ( newCurrentDir, '/' );
+ 
+          if ( slash )
+          {
+-            * ( slash + ( slash - * ( Statebag->CurrentDirectory ) > 0 ? 0 : 1 ) ) ='\0';
++            * ( slash + ( slash - newCurrentDir > 0 ? 0 : 1 ) ) ='\0';
++	    Statebag->CurrentDirectory = cString(newCurrentDir);
+             CurrentFile=Statebag->CurrentFiles->Last() ? strdup ( Statebag->CurrentFiles->Last()->GetObject() ) : NULL;
+ 
+             if ( Statebag->CurrentFiles->Last() )
+@@ -214,6 +217,8 @@
+                Statebag->CurrentFiles->Del ( Statebag->CurrentFiles->Last() );
+             }
+          }
++	 free(newCurrentDir);
++	 }
+       }
+    }
+ 
+@@ -239,7 +244,7 @@
+    if ( Task==taskBrowse )
+    {
+       char* Title= ( char* ) malloc ( strlen ( tr ( "Filebrowser" ) ) + strlen ( Statebag->CurrentDirectory ) + 3 );
+-      char* Title_tmp=NULL;
++      const char* Title_tmp=NULL;
+       sprintf ( Title, "%s: %s", tr ( "Filebrowser" ), ( ( Title_tmp=strrchr ( Statebag->CurrentDirectory, '/' ) ) && ! ( Statebag->ShowFullPath ) ) ? Title_tmp + 1 : * ( Statebag->CurrentDirectory ) );
+       SetTitle ( Title );
+       free ( Title );
