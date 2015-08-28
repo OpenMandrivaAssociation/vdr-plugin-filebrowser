@@ -4,7 +4,7 @@
 Summary:	VDR plugin: Browse through files and execute actions on them
 Name:		vdr-plugin-%plugin
 Version:	0.2.0
-Release:	7
+Release:	8
 Group:		Video
 License:	GPLv3+
 URL:		http://vdr.nasenbaeren.net/filebrowser/
