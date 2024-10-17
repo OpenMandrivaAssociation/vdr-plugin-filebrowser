@@ -7,7 +7,7 @@ Version:	0.2.0
 Release:	8
 Group:		Video
 License:	GPLv3+
-URL:		http://vdr.nasenbaeren.net/filebrowser/
+URL:		https://vdr.nasenbaeren.net/filebrowser/
 Source:		http://vdr.nasenbaeren.net/filebrowser/vdr-%plugin-%{version}.tgz
 Patch0:		filebrowser-format-string.patch
 Patch1:		filebrowser-type-fixes.patch
